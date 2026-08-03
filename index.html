@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Weather App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🌤️ Weather App</h1>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="city"
+                placeholder="Enter city">
+
+            <button id="searchBtn">
+                Get Weather
+            </button>
+
+            <button id="locationBtn">
+                📍 My Location
+            </button>
+
+        </div>
+
+        <div class="content">
+
+            <!-- Weather Section -->
+            <div class="weather-section">
+
+                <div id="spinner" class="spinner hidden"></div>
+
+                <div id="result"></div>
+
+                <button id="favoriteBtn">
+                    ❤️ Add to Favorites
+                </button>
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+
+                <h3>🕒 Recent Searches</h3>
+
+                <ul id="history"></ul>
+
+                <h3>❤️ Favorite Cities</h3>
+
+                <ul id="favorites"></ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="app.js"></script>
+
+</body>
+
+</body>
+
+</html>
