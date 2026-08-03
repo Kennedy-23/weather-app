@@ -5,7 +5,8 @@ import {
     getLocation,
     getWeather,
     getWeatherFromCoords,
-    getLocationFromCoords
+    getLocationFromCoords,
+    searchCities
 } from "./api.js";
 
 import {
@@ -21,25 +22,27 @@ import {
 const cityInput = document.getElementById("city");
 const searchBtn = document.getElementById("searchBtn");
 const locationBtn = document.getElementById("locationBtn");
-
 const result = document.getElementById("result");
-
 const historyList = document.getElementById("history");
-
 const favoriteBtn = document.getElementById("favoriteBtn");
-
 const favoritesList = document.getElementById("favorites");
+const themeBtn = document.getElementById("themeBtn");
+const savedTheme = localStorage.getItem("theme");
+const suggestions = document.getElementById("suggestions");
+const unitBtn = document.getElementById("unitBtn");
 
+if(savedTheme === "dark"){
+    document.body.classList.add("dark");
+    themeBtn.textContent ="Light Mode";
+}
 // ==========================
 // Variables
 // ==========================
 let currentCity = "";
-
-let searchHistory =
-    JSON.parse(localStorage.getItem("history")) || [];
-
-let favorites =
-    JSON.parse(localStorage.getItem("favorites")) || [];
+let debounceTimer;
+let searchHistory = JSON.parse(localStorage.getItem("history")) || [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let temperatureUnit = localStorage.getItem("unit") || "C";
 
 // ==========================
 // Display Saved Data
@@ -60,33 +63,15 @@ displayCityList(
 // ==========================
 // Event Listeners
 // ==========================
-searchBtn.addEventListener(
-    "click",
-    searchCity
-);
-
-locationBtn.addEventListener(
-    "click",
-    getCurrentLocation
-);
-
-favoriteBtn.addEventListener(
-    "click",
-    addFavorite
-);
-
-cityInput.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (event.key === "Enter") {
-
-            searchCity();
-
-        }
-
-    }
-);
+searchBtn.addEventListener("click", searchCity );
+locationBtn.addEventListener("click", getCurrentLocation);
+favoriteBtn.addEventListener("click", addFavorite);
+themeBtn.addEventListener("click",toggleTheme);
+cityInput.addEventListener("input",showSuggestions);
+unitBtn.addEventListener("click",toggleUnit);
+cityInput.addEventListener( "keydown",function (event) {
+ if (event.key === "Enter") {
+     searchCity(); } } );
 
 // ==========================
 // Search City
@@ -245,25 +230,48 @@ async function getCurrentLocation() {
 // ==========================
 function saveSearch(city) {
 
-    if (!searchHistory.includes(city)) {
+    // Remove duplicate if it already exists
+    searchHistory = searchHistory.filter(function(item){
 
-        searchHistory.push(city);
+        return item.city !== city;
 
-        localStorage.setItem(
-            "history",
-            JSON.stringify(searchHistory)
-        );
+    });
 
-        displayCityList(
-            searchHistory,
-            historyList,
-            loadHistoryCity
-        );
+    // Add the newest search at the top
+    searchHistory.unshift({
+
+        city: city,
+
+        time: new Date().toISOString()
+
+    });
+
+    // Keep only the last 10 searches
+    if(searchHistory.length > 10){
+
+        searchHistory.pop();
 
     }
 
-}
+    localStorage.setItem(
 
+        "history",
+
+        JSON.stringify(searchHistory)
+
+    );
+
+    displayCityList(
+
+        searchHistory,
+
+        historyList,
+
+        loadHistoryCity
+
+    );
+
+}
 // ==========================
 // Load City From History
 // ==========================
@@ -340,4 +348,89 @@ function removeFavorite(city) {
         removeFavorite
     );
 
+}
+async function showSuggestions() {
+
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(async function () {
+
+        const text = cityInput.value.trim();
+
+        if (text.length < 2) {
+
+            suggestions.innerHTML = "";
+
+            return;
+
+        }
+
+        const cities = await searchCities(text);
+
+        suggestions.innerHTML = "";
+
+        for (const city of cities) {
+
+            const li = document.createElement("li");
+
+            li.textContent =
+                `${city.name}, ${city.country}`;
+
+            li.addEventListener("click", function () {
+
+                cityInput.value = city.name;
+
+                suggestions.innerHTML = "";
+
+            });
+
+            suggestions.appendChild(li);
+
+        }
+
+    }, 300);
+
+}
+function toggleTheme(){
+
+    document.body.classList.toggle("dark");
+
+    if(document.body.classList.contains("dark")){
+
+        themeBtn.textContent =
+            "☀️ Light Mode";
+
+        localStorage.setItem(
+            "theme",
+            "dark"
+        );
+
+    }else{
+
+        themeBtn.textContent =
+            "Dark Mode";
+
+        localStorage.setItem(
+            "theme",
+            "light"
+        );
+
+    }
+
+}
+function toggleUnit() {
+
+    if (temperatureUnit === "C") {
+
+        temperatureUnit = "F";
+
+    } else {
+        temperatureUnit = "C";
+    }
+    localStorage.setItem(
+        "unit",
+        temperatureUnit
+    );
+    unitBtn.textContent =
+        `°${temperatureUnit}`;
 }

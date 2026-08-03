@@ -487,45 +487,48 @@ button:hover{
 
 }
 
-/* ===================================
+/* ==========================
+   THEME BUTTON
+========================== */
+
+#themeBtn{
+
+    width:100%;
+
+    margin-bottom:20px;
+
+    background:white;
+
+    color:#333;
+
+    font-weight:bold;
+
+}
+
+#themeBtn:hover{
+
+    background:#f2f2f2;
+
+}
+/* ==========================
    DARK MODE
-=================================== */
+========================== */
 
-.dark-mode{
+body.dark{
 
-    background:linear-gradient(
-        135deg,
-        #141E30,
-        #243B55
-    );
+    background:#111827;
 
 }
 
-.dark-mode .container{
+body.dark .container{
 
-    background:rgba(20,20,20,.35);
+    background:rgba(30,30,30,.8);
 
-}
-
-.dark-mode .weather-section{
-
-    background:rgba(40,40,40,.45);
+    color:white;
 
 }
 
-.dark-mode .sidebar{
-
-    background:rgba(40,40,40,.45);
-
-}
-
-.dark-mode .forecast-card{
-
-    background:rgba(60,60,60,.45);
-
-}
-
-.dark-mode input{
+body.dark input{
 
     background:#222;
 
@@ -533,93 +536,63 @@ button:hover{
 
 }
 
-.dark-mode button{
+body.dark button{
 
-    background:#444;
+    background:#333;
 
     color:white;
 
 }
 
-/* ===================================
-   RESPONSIVE
-=================================== */
+body.dark .forecast-card{
 
-@media (max-width:900px){
+    background:#222;
 
-    .content{
-
-        grid-template-columns:1fr;
-
-    }
+    color:white;
 
 }
 
-@media (max-width:650px){
+body.dark li{
 
-    body{
+    color:white;
 
-        padding:20px;
+}
+/* ==========================
+   SEARCH SUGGESTIONS
+========================== */
 
-    }
+#suggestions{
 
-    .container{
+    list-style:none;
 
-        padding:20px;
+    background:white;
 
-    }
+    border-radius:10px;
 
-    .search-box{
+    margin-top:5px;
 
-        flex-direction:column;
+    overflow:hidden;
 
-    }
+    position:absolute;
 
-    .search-box button{
+    width:100%;
 
-        width:100%;
+    z-index:100;
 
-    }
-
-    .container h1{
-
-        font-size:34px;
-
-    }
-
-    #result h1{
-
-        font-size:45px;
-
-    }
-
-    .forecast-container{
-
-        grid-template-columns:
-        repeat(auto-fit,minmax(120px,1fr));
-
-    }
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
 
 }
 
-@media (max-width:450px){
+#suggestions li{
 
-    #result h2{
+    padding:12px;
 
-        font-size:24px;
+    cursor:pointer;
 
-    }
+}
 
-    #result h1{
+#suggestions li:hover{
 
-        font-size:38px;
-
-    }
-
-    .forecast-card{
-
-        padding:15px;
-
-    }
+    background:#f0f0f0;
 
 }

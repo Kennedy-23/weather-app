@@ -3,41 +3,46 @@
 export function getWeatherIcon(weatherCode) {
 
     switch (weatherCode) {
-
         case 0:
-            return "🌤️";
-
+            return "Sunny";
         case 1:
         case 2:
-            return "🌤️";
-
+            return "Partly Cloudy";
         case 3:
-            return "☁️";
-
-        case 45:
-        case 48:
-            return "🌫️";
-
-        case 51:
-        case 53:
-        case 55:
-            return "Drizzle";
-
+            return "Cloudy";
         case 61:
+        case 62:
         case 63:
+        case 64:
         case 65:
-            return "🌧️";
-
+            return "Rain";
         case 71:
+        case 72:
         case 73:
+        case 74:
         case 75:
-            return "❄️";
-
-        case 95:
-            return "⛈️";
-
+            return "Snow";
         default:
-            return "❓";
+            return "Unknown";
     }
+
+}
+export function getWeatherDescription(code) {
+
+    if (code === 0) return "Sunny";
+
+    if (code === 1 || code === 2)
+        return "Partly Cloudy";
+
+    if (code === 3)
+        return "Cloudy";
+
+    if (code >= 61 && code <= 65)
+        return "Rain";
+
+    if (code >= 71 && code <= 75)
+        return "Snow";
+
+    return "Unknown";
 
 }
