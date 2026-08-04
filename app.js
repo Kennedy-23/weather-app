@@ -13,7 +13,8 @@ import {
     displayWeather,
     showMessage,
     displayCityList,
-    updateBackground
+    updateBackground,
+    drawChart
 } from "./ui.js";
 
 // ==========================
@@ -34,6 +35,11 @@ const unitBtn = document.getElementById("unitBtn");
 if(savedTheme === "dark"){
     document.body.classList.add("dark");
     themeBtn.textContent ="Light Mode";
+}
+const spinner = document.getElementById("spinner");
+function showSpinner(){ spinner.classList.remove("hidden");
+}
+function hideSpinner(){ spinner.classList.add("hidden");
 }
 // ==========================
 // Variables
@@ -72,20 +78,23 @@ unitBtn.addEventListener("click",toggleUnit);
 cityInput.addEventListener( "keydown",function (event) {
  if (event.key === "Enter") {
      searchCity(); } } );
+     const canvas = document.getElementById("weatherChart");
 
 // ==========================
 // Search City
 // ==========================
-async function searchCity() {
 
+async function searchCity() {
+showSpinner();
     try {
 
         const city = cityInput.value.trim();
-
+        
         if (city === "") {
+            hideSpinner();
 
             showMessage(
-                result,
+                "error",
                 "Please enter a city."
             );
 
@@ -94,7 +103,7 @@ async function searchCity() {
         }
 
         showMessage(
-            result,
+            "info",
             "Loading weather..."
         );
 
@@ -107,10 +116,18 @@ async function searchCity() {
             await getWeather(location);
 
         displayWeather(
-            location,
-            weatherData,
-            result
-        );
+    location,
+    weatherData,
+    result,
+    temperatureUnit
+);
+hideSpinner();
+
+drawChart(weatherData);
+        showMessage(
+    "success",
+    "Weather loaded successfully!"
+);
 
         updateBackground(
             weatherData.current.weather_code
@@ -125,11 +142,11 @@ async function searchCity() {
     }
 
     catch (error) {
-
+        hideSpinner();
         console.error(error);
 
         showMessage(
-            result,
+            "error",
             error.message
         );
 
@@ -139,12 +156,14 @@ async function searchCity() {
 // ==========================
 // Current Location Weather
 // ==========================
+
 async function getCurrentLocation() {
+    showSpinner();
 
     if (!navigator.geolocation) {
 
         showMessage(
-            result,
+            "error",
             "Geolocation is not supported by your browser."
         );
 
@@ -159,7 +178,7 @@ async function getCurrentLocation() {
             try {
 
                 showMessage(
-                    result,
+                    "info",
                     "Getting your location..."
                 );
 
@@ -184,17 +203,20 @@ async function getCurrentLocation() {
                     );
 
                 currentCity = location.name;
-
                 displayWeather(
-                    location,
-                    weatherData,
-                    result
+                location,
+                weatherData,
+                result,
+                temperatureUnit
                 );
 
-                updateBackground(
-                    weatherData.current.weather_code
-                );
+                drawChart(weatherData);
 
+               updateBackground(
+               weatherData.current.weather_code
+             );
+
+               hideSpinner();
                 saveSearch(currentCity);
 
             }
@@ -204,7 +226,7 @@ async function getCurrentLocation() {
                 console.error(error);
 
                 showMessage(
-                    result,
+                    "error",
                     error.message
                 );
 
@@ -213,9 +235,10 @@ async function getCurrentLocation() {
         },
 
         function () {
+            hideSpinner();
 
             showMessage(
-                result,
+                "error",
                 "Location permission denied."
             );
 
@@ -398,7 +421,7 @@ function toggleTheme(){
     if(document.body.classList.contains("dark")){
 
         themeBtn.textContent =
-            "☀️ Light Mode";
+            " Light Mode";
 
         localStorage.setItem(
             "theme",

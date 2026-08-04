@@ -7,12 +7,16 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Weather App</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>🌤️ Weather App</title>
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -22,18 +26,37 @@
     <div class="container">
 
         <h1>🌤️ Weather App</h1>
-        <button id="themeBtn"> Dark Mode</button>
-        <button id="unitBtn">°C</button>
+
+        <!-- Top Buttons -->
+        <div class="top-buttons">
+
+            <button id="themeBtn" aria-label="Toggle Dark Mode">
+                🌙 Dark Mode
+            </button>
+
+            <button id="unitBtn" aria-label="Change Temperature Unit">
+                🌡️ °C
+            </button>
+
+        </div>
+
+        <!-- Search -->
         <div class="search-box">
 
-            <input
-                type="text"
-                id="city"
-                placeholder="Enter city">
+            <div class="search-input">
+
+                <input
+                    type="text"
+                    id="city"
+                    placeholder="Enter city..."
+                    autocomplete="off">
+
                 <ul id="suggestions"></ul>
 
+            </div>
+
             <button id="searchBtn">
-                Get Weather
+                🔍 Search
             </button>
 
             <button id="locationBtn">
@@ -42,23 +65,26 @@
 
         </div>
 
-        <div class="content">
+        <main class="content">
 
             <!-- Weather Section -->
-            <div class="weather-section">
+            <section class="weather-section">
 
                 <div id="spinner" class="spinner hidden"></div>
 
                 <div id="result"></div>
 
+                <!-- Weather Chart -->
+                <canvas id="weatherChart"></canvas>
+
                 <button id="favoriteBtn">
                     ❤️ Add to Favorites
                 </button>
 
-            </div>
+            </section>
 
             <!-- Sidebar -->
-            <div class="sidebar">
+            <aside class="sidebar">
 
                 <h3>🕒 Recent Searches</h3>
 
@@ -68,15 +94,16 @@
 
                 <ul id="favorites"></ul>
 
-            </div>
+            </aside>
 
-        </div>
+        </main>
 
     </div>
+    <div id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script type="module" src="app.js"></script>
-
-</body>
 
 </body>
 
